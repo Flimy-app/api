@@ -1,1 +1,1 @@
-web: gunicorn testChat:app
+web: gunicorn wsgi:app
