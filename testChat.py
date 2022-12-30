@@ -94,7 +94,7 @@ api = Api(app)
 @app.route("/result", methods=['POST', 'GET'])
 # @cross_origin(supports_credentials=True)
 def chateraise():
-    return ("haleluya")
+    return(data)
     tempo = 0
     sama = 0
     daisutemp = 0
