@@ -157,4 +157,4 @@ def chateraise():
     # response = k.respond(input_text)
     # print("Bot> " + response)
 if __name__ == '__main__':
-    app.run(debug=True, port=2000)
+    app.run(debug=True)
