@@ -31,7 +31,18 @@ with open('file.aiml', 'r') as f:
       pattern_to_template[temp_pattern] = line.split('<template>')[1].split('</template>')[0]
       temp_pattern = None
 data = [(pattern, template) for (pattern, template) in pattern_to_template.items()]
-
+rabin2 = []
+for n in range(len(data)):
+        input_text2 = data[n][0]
+        input_text2 = casefolding(input_text2)
+        input_text2 = numberfilter(input_text2)
+        input_text2 = symbolfilter(input_text2)
+        input_text2 = filtering(input_text2)
+        input_text2 = stemming(input_text2)
+        input_text2 = whitespacefilter(input_text2)
+        input_text2 = tokenizing(input_text2)
+        rabin2ori = input_text2
+        rabin2 = hashing(input_text2)
 
 def casefolding(input_text):
     input_text = input_text.lower()
@@ -94,7 +105,6 @@ api = Api(app)
 @app.route("/result", methods=['POST', 'GET'])
 # @cross_origin(supports_credentials=True)
 def chateraise():
-    return(data)
     tempo = 0
     sama = 0
     daisutemp = 0
@@ -111,32 +121,21 @@ def chateraise():
     input_text = tokenizing(input_text)
     rabinori = input_text   
     rabin = hashing(input_text)
-    for n in range(len(data)):
-        input_text2 = data[n][0]
-        input_text2 = casefolding(input_text2)
-        input_text2 = numberfilter(input_text2)
-        input_text2 = symbolfilter(input_text2)
-        input_text2 = filtering(input_text2)
-        input_text2 = stemming(input_text2)
-        input_text2 = whitespacefilter(input_text2)
-        input_text2 = tokenizing(input_text2)
-        rabin2ori = input_text2
-        rabin2 = hashing(input_text2)
-        for i in range(len(rabin)):
-            for j in range(len(rabin2)):
-                if(rabin[i] == rabin2[j]):
-                    if(rabinori[i] == rabin2ori[j]):
-                        sama = sama + 1
-        if (tempo < dice(sama, len(rabin), len(rabin2))):
-            daisutemp = n
-            tempo = dice(sama, len(rabin), len(rabin2))
-        # daisu.append(dice(sama, len(rabin), len(rabin2)))
-        # if (dice(sama, len(rabin), len(rabin2)) > 70):
-        #     checker = 1
-        #     daisutemp = len(daisu) - 1
-        #     sama = 0
-        #     break
-        sama = 0
+      for i in range(len(rabin)):
+          for j in range(len(rabin2)):
+              if(rabin[i] == rabin2[j]):
+                  if(rabinori[i] == rabin2ori[j]):
+                      sama = sama + 1
+      if (tempo < dice(sama, len(rabin), len(rabin2))):
+          daisutemp = n
+          tempo = dice(sama, len(rabin), len(rabin2))
+      # daisu.append(dice(sama, len(rabin), len(rabin2)))
+      # if (dice(sama, len(rabin), len(rabin2)) > 70):
+      #     checker = 1
+      #     daisutemp = len(daisu) - 1
+      #     sama = 0
+      #     break
+      sama = 0
     # if (checker == 0):
     # for i in range(len(daisu)):
     #     if (daisu[i] > daisu[daisutemp]):
