@@ -18,6 +18,20 @@ from flask_restful import Api
 # rabin = []
 
 # daisu = []
+pattern_to_template = {}
+temp_pattern = None
+with open('file.aiml', 'r') as f:
+  lines = f.readlines()
+  for line in lines:
+    if '<pattern>' in line:
+      temp_pattern = line.split('<pattern>')[1].split('</pattern>')[0]
+    if '<template>' in line:
+      if (temp_pattern is None):
+        print("Ga ada pattern bro")
+        continue
+      pattern_to_template[temp_pattern] = line.split('<template>')[1].split('</template>')[0]
+      temp_pattern = None
+data = [(pattern, template) for (pattern, template) in pattern_to_template.items()]
 
 def casefolding(input_text):
     input_text = input_text.lower()
@@ -110,7 +124,7 @@ def chateraise():
                     if(rabinori[i] == rabin2ori[k][j]):
                         sama = sama + 1
         if (tempo < dice(sama, len(rabin), len(rabin2[k]))):
-            daisutemp = n
+            daisutemp = k
             tempo = dice(sama, len(rabin), len(rabin2[k]))
         # daisu.append(dice(sama, len(rabin), len(rabin2)))
         # if (dice(sama, len(rabin), len(rabin2)) > 70):
