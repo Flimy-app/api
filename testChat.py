@@ -1,5 +1,6 @@
 import aiml
 import re
+import pickle
 import string
 import time
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
@@ -17,20 +18,6 @@ from flask_restful import Api
 # rabin = []
 
 # daisu = []
-pattern_to_template = {}
-temp_pattern = None
-with open('file.aiml', 'r') as f:
-  lines = f.readlines()
-  for line in lines:
-    if '<pattern>' in line:
-      temp_pattern = line.split('<pattern>')[1].split('</pattern>')[0]
-    if '<template>' in line:
-      if (temp_pattern is None):
-        print("Ga ada pattern bro")
-        continue
-      pattern_to_template[temp_pattern] = line.split('<template>')[1].split('</template>')[0]
-      temp_pattern = None
-data = [(pattern, template) for (pattern, template) in pattern_to_template.items()]
 
 def casefolding(input_text):
     input_text = input_text.lower()
@@ -84,20 +71,14 @@ def dice(sama, a, b):
     temp = 2 * sama / (a + b)
     temp = temp * 100
     return temp
-  
 rabin2 = []
+
+with open('DataProses', 'rb') as f:
+    rabin2 = pickle.load(f)
+
 rabin2ori = []
-for n in range(len(data)):
-    input_text2 = data[n][0]
-    input_text2 = casefolding(input_text2)
-    input_text2 = numberfilter(input_text2)
-    input_text2 = symbolfilter(input_text2)
-    input_text2 = filtering(input_text2)
-    input_text2 = stemming(input_text2)
-    input_text2 = whitespacefilter(input_text2)
-    input_text2 = tokenizing(input_text2)
-    rabin2ori.append(input_text2)
-    rabin2.append(hashing(input_text2))
+with open('DataProsesori', 'rb') as f:
+    rabin2ori = pickle.load(f)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -125,7 +106,7 @@ def chateraise():
     for k in range(len(rabin2)):
         for i in range(len(rabin)):
             for j in range(len(rabin2[k])):
-                if(rabin[i] == rabin2[j]):
+                if(rabin[i] == rabin2[k][j]):
                     if(rabinori[i] == rabin2ori[k][j]):
                         sama = sama + 1
         if (tempo < dice(sama, len(rabin), len(rabin2[k]))):
