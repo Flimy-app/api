@@ -12,7 +12,6 @@ MarkupSafe==2.1.1
 nltk==3.7
 numpy==1.23.2
 python-aiml==0.9.3
-gunicorn
 pytz==2022.6
 regex==2022.10.31
 Sastrawi==1.0.1
